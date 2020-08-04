@@ -1,14 +1,18 @@
-require "bundler/setup"
-require "rggen/duh"
+# frozen_string_literal: true
+
+require 'bundler/setup'
+require 'rggen/devtools/spec_helper'
+
+require 'rggen/core'
+
+builder = RgGen::Core::Builder.create
+RgGen.builder(builder)
+
+require 'rggen/default_register_map'
+RgGen::DefaultRegisterMap.default_setup(builder)
 
 RSpec.configure do |config|
-  # Enable flags like --only-failures and --next-failure
-  config.example_status_persistence_file_path = ".rspec_status"
-
-  # Disable RSpec exposing methods globally on `Module` and `main`
-  config.disable_monkey_patching!
-
-  config.expect_with :rspec do |c|
-    c.syntax = :expect
-  end
+  RgGen::Devtools::SpecHelper.setup(config)
 end
+
+require 'rggen/duh'

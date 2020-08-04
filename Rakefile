@@ -1,6 +1,6 @@
-require "bundler/gem_tasks"
-require "rspec/core/rake_task"
+# frozen_string_literal: true
 
-RSpec::Core::RakeTask.new(:spec)
+require 'bundler/setup'
+require 'rggen/devtools/rake_helper'
 
-task :default => :spec
+RgGen::Devtools::RakeHelper.setup_default_tasks

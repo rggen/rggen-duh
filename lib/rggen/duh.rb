@@ -1,8 +1,3 @@
-require "rggen/duh/version"
+# frozen_string_literal: true
 
-module Rggen
-  module Duh
-    class Error < StandardError; end
-    # Your code goes here...
-  end
-end
+require_relative 'duh/version'

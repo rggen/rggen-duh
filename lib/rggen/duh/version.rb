@@ -1,5 +1,7 @@
-module Rggen
-  module Duh
-    VERSION = "0.1.0"
+# frozen_string_literal: true
+
+module RgGen
+  module DUH
+    VERSION = '0.1.0'
   end
 end

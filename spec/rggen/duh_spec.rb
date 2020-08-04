@@ -1,9 +1,7 @@
-RSpec.describe Rggen::Duh do
-  it "has a version number" do
-    expect(Rggen::Duh::VERSION).not_to be nil
-  end
+# frozen_string_literal: true
 
-  it "does something useful" do
-    expect(false).to eq(true)
+RSpec.describe RgGen::DUH do
+  it 'has a version number' do
+    expect(RgGen::DUH::VERSION).not_to be nil
   end
 end
