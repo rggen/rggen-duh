@@ -4,8 +4,10 @@
 /coverage/
 /doc/
 /pkg/
+/node_modules/
 /spec/reports/
 /tmp/
 
 .rspec_status
 Gemfile.lock
+package-lock.json

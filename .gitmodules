@@ -1,0 +1,3 @@
+[submodule "duh-schema"]
+	path = duh-schema
+	url = https://github.com/sifive/duh-schema.git

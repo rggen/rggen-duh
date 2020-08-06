@@ -1,0 +1,2755 @@
+{
+  "version": "0.10.0",
+  "any": {
+    "oneOf": [
+      {
+        "type": "object",
+        "title": "Catalog document",
+        "properties": {
+          "catalog": {
+            "type": "object",
+            "properties": {
+              "components": {
+                "type": "array",
+                "items": {
+                  "$ref": "defs#/component"
+                }
+              },
+              "designs": {
+                "type": "array",
+                "items": {
+                  "$ref": "defs#/design"
+                }
+              },
+              "busDefinitions": {
+                "type": "array",
+                "items": {
+                  "$ref": "defs#/abstractionDefinition"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "catalog"
+        ]
+      },
+      {
+        "type": "object",
+        "title": "Component document",
+        "description": "\nComponent document collects information about a single hardware block without\nexpressing internal structure or hierarchy. Component document expressing following aspects:\n* name, version\n* top level ports\n* parameter schema\n* bus interfaces\n* memory regions\n* registers\n* clocks, resets\n* block generation flow\n* references to implementation, documentation, tests\n",
+        "required": [
+          "component"
+        ],
+        "properties": {
+          "component": {
+            "type": "object",
+            "required": [
+              "vendor",
+              "library",
+              "name",
+              "version"
+            ],
+            "properties": {
+              "vendor": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 256,
+                "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+              },
+              "library": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+              },
+              "version": {
+                "type": "string"
+              },
+              "busInterfaces": {
+                "type": "array",
+                "uniqueItemProperties": [
+                  "name"
+                ],
+                "items": {
+                  "$ref": "defs#/busInterface"
+                }
+              },
+              "model": {
+                "type": "object",
+                "required": [
+                  "ports"
+                ],
+                "properties": {
+                  "ports": {
+                    "title": "Ports",
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "patternProperties": {
+                          ".+": {
+                            "oneOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "object",
+                                "required": [
+                                  "direction",
+                                  "width"
+                                ],
+                                "properties": {
+                                  "direction": {
+                                    "enum": [
+                                      "in",
+                                      "out",
+                                      "inout"
+                                    ]
+                                  },
+                                  "width": {
+                                    "oneOf": [
+                                      {
+                                        "type": "integer",
+                                        "minimum": 1
+                                      },
+                                      {
+                                        "type": "string"
+                                      }
+                                    ]
+                                  },
+                                  "analog": {
+                                    "enum": [
+                                      "in",
+                                      "out",
+                                      "inout"
+                                    ]
+                                  },
+                                  "displayName": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "type": "array",
+                        "uniqueItemProperties": [
+                          "name"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "name",
+                            "wire"
+                          ],
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 256,
+                              "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                            },
+                            "wire": {
+                              "oneOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "object",
+                                  "required": [
+                                    "direction",
+                                    "width"
+                                  ],
+                                  "properties": {
+                                    "direction": {
+                                      "enum": [
+                                        "in",
+                                        "out",
+                                        "inout"
+                                      ]
+                                    },
+                                    "width": {
+                                      "oneOf": [
+                                        {
+                                          "type": "integer",
+                                          "minimum": 1
+                                        },
+                                        {
+                                          "type": "string"
+                                        }
+                                      ]
+                                    },
+                                    "analog": {
+                                      "enum": [
+                                        "in",
+                                        "out",
+                                        "inout"
+                                      ]
+                                    },
+                                    "displayName": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "addressSpaces": {
+                "type": "array",
+                "uniqueItemProperties": [
+                  "name"
+                ],
+                "items": {
+                  "type": "object",
+                  "title": "Address space",
+                  "required": [
+                    "name",
+                    "range",
+                    "width"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256,
+                      "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                    },
+                    "range": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "width": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              },
+              "memoryMaps": {
+                "type": "array",
+                "uniqueItemProperties": [
+                  "name"
+                ],
+                "items": {
+                  "$ref": "defs#/memoryMap"
+                }
+              },
+              "componentGenerators": {
+                "type": "array"
+              },
+              "fileSets": {
+                "type": "object"
+              },
+              "parameters": {
+                "type": "array"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "object",
+        "title": "Desgin document",
+        "properties": {
+          "design": {
+            "type": "object",
+            "properties": {
+              "vendor": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 256,
+                "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+              },
+              "library": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+              },
+              "version": {
+                "type": "string"
+              },
+              "instances": {
+                "type": "array",
+                "uniqueItemProperties": [
+                  "name"
+                ],
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256,
+                      "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                    },
+                    "ref": {
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "ref"
+                  ]
+                }
+              },
+              "connections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256,
+                      "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                    },
+                    "source": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 2,
+                      "maxItems": 2
+                    },
+                    "target": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 2,
+                      "maxItems": 2
+                    },
+                    "import": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256,
+                      "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                    },
+                    "export": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256,
+                      "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                    }
+                  }
+                }
+              },
+              "adHocConnections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256,
+                      "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                    },
+                    "portReferences": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "oneOf": [
+                          {
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "internal"
+                                ]
+                              },
+                              "componentRef": {
+                                "type": "object"
+                              },
+                              "portRef": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 256,
+                                "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+                              }
+                            },
+                            "required": [
+                              "portRef",
+                              "componentRef"
+                            ]
+                          },
+                          {
+                            "properties": {
+                              "kind": {
+                                "enum": [
+                                  "extrenal"
+                                ]
+                              },
+                              "portRef": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 256,
+                                "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+                              }
+                            },
+                            "required": [
+                              "portRef"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "vendor",
+              "library",
+              "name",
+              "version"
+            ]
+          }
+        },
+        "required": [
+          "design"
+        ]
+      },
+      {
+        "type": "object",
+        "title": "Abstraction definition document",
+        "required": [
+          "abstractionDefinition"
+        ],
+        "properties": {
+          "abstractionDefinition": {
+            "type": "object",
+            "required": [
+              "name",
+              "version",
+              "vendor",
+              "library",
+              "busType",
+              "ports"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+              },
+              "version": {
+                "type": "string"
+              },
+              "vendor": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 256,
+                "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+              },
+              "library": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+              },
+              "busType": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "version",
+                  "vendor",
+                  "library"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                  },
+                  "version": {
+                    "type": "string"
+                  },
+                  "vendor": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 256,
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+                  },
+                  "library": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+                  }
+                }
+              },
+              "ports": {
+                "type": "object",
+                "patternProperties": {
+                  ".+": {
+                    "type": "object",
+                    "required": [
+                      "description",
+                      "wire"
+                    ],
+                    "properties": {
+                      "description": {
+                        "type": "string"
+                      },
+                      "wire": {
+                        "type": "object",
+                        "properties": {
+                          "onMaster": {
+                            "type": "object",
+                            "properties": {
+                              "direction": {
+                                "enum": [
+                                  "in",
+                                  "out"
+                                ]
+                              },
+                              "width": {
+                                "oneOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              }
+                            },
+                            "oneOf": [
+                              {
+                                "required": [
+                                  "direction"
+                                ],
+                                "properties": {
+                                  "presence": {
+                                    "enum": [
+                                      "optional",
+                                      "required"
+                                    ]
+                                  }
+                                }
+                              },
+                              {
+                                "required": [
+                                  "presence"
+                                ],
+                                "properties": {
+                                  "presence": {
+                                    "enum": [
+                                      "illegal"
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "onSlave": {
+                            "type": "object",
+                            "properties": {
+                              "direction": {
+                                "enum": [
+                                  "in",
+                                  "out"
+                                ]
+                              },
+                              "width": {
+                                "oneOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              }
+                            },
+                            "oneOf": [
+                              {
+                                "required": [
+                                  "direction"
+                                ],
+                                "properties": {
+                                  "presence": {
+                                    "enum": [
+                                      "optional",
+                                      "required"
+                                    ]
+                                  }
+                                }
+                              },
+                              {
+                                "required": [
+                                  "presence"
+                                ],
+                                "properties": {
+                                  "presence": {
+                                    "enum": [
+                                      "illegal"
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "onInitiator": {
+                            "type": "object",
+                            "properties": {
+                              "direction": {
+                                "enum": [
+                                  "in",
+                                  "out"
+                                ]
+                              },
+                              "width": {
+                                "oneOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              }
+                            },
+                            "oneOf": [
+                              {
+                                "required": [
+                                  "direction"
+                                ],
+                                "properties": {
+                                  "presence": {
+                                    "enum": [
+                                      "optional",
+                                      "required"
+                                    ]
+                                  }
+                                }
+                              },
+                              {
+                                "required": [
+                                  "presence"
+                                ],
+                                "properties": {
+                                  "presence": {
+                                    "enum": [
+                                      "illegal"
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "onTarget": {
+                            "type": "object",
+                            "properties": {
+                              "direction": {
+                                "enum": [
+                                  "in",
+                                  "out"
+                                ]
+                              },
+                              "width": {
+                                "oneOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              }
+                            },
+                            "oneOf": [
+                              {
+                                "required": [
+                                  "direction"
+                                ],
+                                "properties": {
+                                  "presence": {
+                                    "enum": [
+                                      "optional",
+                                      "required"
+                                    ]
+                                  }
+                                }
+                              },
+                              {
+                                "required": [
+                                  "presence"
+                                ],
+                                "properties": {
+                                  "presence": {
+                                    "enum": [
+                                      "illegal"
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          "isAddress": {
+                            "description": "the port contains address information",
+                            "type": "boolean",
+                            "default": false
+                          },
+                          "isData": {
+                            "description": "the port contains data information",
+                            "type": "boolean",
+                            "default": false
+                          },
+                          "isClock": {
+                            "description": "port is a clock for this bus interface",
+                            "type": "boolean",
+                            "default": false
+                          },
+                          "isReset": {
+                            "description": "port is a reset for this bus interface",
+                            "type": "boolean",
+                            "default": false
+                          },
+                          "requiresDriver": {
+                            "description": "specifies whether the port requires a driver when used in a completed design",
+                            "type": "boolean",
+                            "default": false
+                          },
+                          "defaultValue": {
+                            "description": "default logic value for this wire port",
+                            "type": "integer",
+                            "minimum": 0,
+                            "default": 0
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "props": {
+                "type": "object",
+                "patternProperties": {
+                  ".+": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "enum": [
+                          "array",
+                          "boolean",
+                          "integer",
+                          "null",
+                          "number",
+                          "object",
+                          "string"
+                        ]
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "properties": {
+                        "type": "object"
+                      },
+                      "allOf": {
+                        "type": "array",
+                        "minItems": 1
+                      },
+                      "anyOf": {
+                        "type": "array",
+                        "minItems": 1
+                      },
+                      "oneOf": {
+                        "type": "array",
+                        "minItems": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "object",
+        "title": "Bus definition document",
+        "required": [
+          "busDefinition"
+        ],
+        "properties": {
+          "busDefinition": {
+            "type": "object",
+            "required": [
+              "name",
+              "version",
+              "vendor",
+              "library"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+              },
+              "version": {
+                "type": "string"
+              },
+              "vendor": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 256,
+                "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+              },
+              "library": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "component": {
+    "type": "object",
+    "title": "Component document",
+    "description": "\nComponent document collects information about a single hardware block without\nexpressing internal structure or hierarchy. Component document expressing following aspects:\n* name, version\n* top level ports\n* parameter schema\n* bus interfaces\n* memory regions\n* registers\n* clocks, resets\n* block generation flow\n* references to implementation, documentation, tests\n",
+    "required": [
+      "component"
+    ],
+    "properties": {
+      "component": {
+        "type": "object",
+        "required": [
+          "vendor",
+          "library",
+          "name",
+          "version"
+        ],
+        "properties": {
+          "vendor": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 256,
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+          },
+          "library": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+          },
+          "version": {
+            "type": "string"
+          },
+          "busInterfaces": {
+            "type": "array",
+            "uniqueItemProperties": [
+              "name"
+            ],
+            "items": {
+              "$ref": "defs#/busInterface"
+            }
+          },
+          "model": {
+            "type": "object",
+            "required": [
+              "ports"
+            ],
+            "properties": {
+              "ports": {
+                "title": "Ports",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "patternProperties": {
+                      ".+": {
+                        "oneOf": [
+                          {
+                            "type": "integer"
+                          },
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "object",
+                            "required": [
+                              "direction",
+                              "width"
+                            ],
+                            "properties": {
+                              "direction": {
+                                "enum": [
+                                  "in",
+                                  "out",
+                                  "inout"
+                                ]
+                              },
+                              "width": {
+                                "oneOf": [
+                                  {
+                                    "type": "integer",
+                                    "minimum": 1
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              },
+                              "analog": {
+                                "enum": [
+                                  "in",
+                                  "out",
+                                  "inout"
+                                ]
+                              },
+                              "displayName": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "array",
+                    "uniqueItemProperties": [
+                      "name"
+                    ],
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "wire"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 256,
+                          "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                        },
+                        "wire": {
+                          "oneOf": [
+                            {
+                              "type": "integer"
+                            },
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "object",
+                              "required": [
+                                "direction",
+                                "width"
+                              ],
+                              "properties": {
+                                "direction": {
+                                  "enum": [
+                                    "in",
+                                    "out",
+                                    "inout"
+                                  ]
+                                },
+                                "width": {
+                                  "oneOf": [
+                                    {
+                                      "type": "integer",
+                                      "minimum": 1
+                                    },
+                                    {
+                                      "type": "string"
+                                    }
+                                  ]
+                                },
+                                "analog": {
+                                  "enum": [
+                                    "in",
+                                    "out",
+                                    "inout"
+                                  ]
+                                },
+                                "displayName": {
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "addressSpaces": {
+            "type": "array",
+            "uniqueItemProperties": [
+              "name"
+            ],
+            "items": {
+              "type": "object",
+              "title": "Address space",
+              "required": [
+                "name",
+                "range",
+                "width"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256,
+                  "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                },
+                "range": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "width": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "memoryMaps": {
+            "type": "array",
+            "uniqueItemProperties": [
+              "name"
+            ],
+            "items": {
+              "$ref": "defs#/memoryMap"
+            }
+          },
+          "componentGenerators": {
+            "type": "array"
+          },
+          "fileSets": {
+            "type": "object"
+          },
+          "parameters": {
+            "type": "array"
+          }
+        }
+      }
+    }
+  },
+  "abstractionDefinition": {
+    "type": "object",
+    "title": "Abstraction definition document",
+    "required": [
+      "abstractionDefinition"
+    ],
+    "properties": {
+      "abstractionDefinition": {
+        "type": "object",
+        "required": [
+          "name",
+          "version",
+          "vendor",
+          "library",
+          "busType",
+          "ports"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+          },
+          "version": {
+            "type": "string"
+          },
+          "vendor": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 256,
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+          },
+          "library": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+          },
+          "busType": {
+            "type": "object",
+            "required": [
+              "name",
+              "version",
+              "vendor",
+              "library"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+              },
+              "version": {
+                "type": "string"
+              },
+              "vendor": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 256,
+                "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+              },
+              "library": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+              }
+            }
+          },
+          "ports": {
+            "type": "object",
+            "patternProperties": {
+              ".+": {
+                "type": "object",
+                "required": [
+                  "description",
+                  "wire"
+                ],
+                "properties": {
+                  "description": {
+                    "type": "string"
+                  },
+                  "wire": {
+                    "type": "object",
+                    "properties": {
+                      "onMaster": {
+                        "type": "object",
+                        "properties": {
+                          "direction": {
+                            "enum": [
+                              "in",
+                              "out"
+                            ]
+                          },
+                          "width": {
+                            "oneOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        },
+                        "oneOf": [
+                          {
+                            "required": [
+                              "direction"
+                            ],
+                            "properties": {
+                              "presence": {
+                                "enum": [
+                                  "optional",
+                                  "required"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "required": [
+                              "presence"
+                            ],
+                            "properties": {
+                              "presence": {
+                                "enum": [
+                                  "illegal"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "onSlave": {
+                        "type": "object",
+                        "properties": {
+                          "direction": {
+                            "enum": [
+                              "in",
+                              "out"
+                            ]
+                          },
+                          "width": {
+                            "oneOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        },
+                        "oneOf": [
+                          {
+                            "required": [
+                              "direction"
+                            ],
+                            "properties": {
+                              "presence": {
+                                "enum": [
+                                  "optional",
+                                  "required"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "required": [
+                              "presence"
+                            ],
+                            "properties": {
+                              "presence": {
+                                "enum": [
+                                  "illegal"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "onInitiator": {
+                        "type": "object",
+                        "properties": {
+                          "direction": {
+                            "enum": [
+                              "in",
+                              "out"
+                            ]
+                          },
+                          "width": {
+                            "oneOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        },
+                        "oneOf": [
+                          {
+                            "required": [
+                              "direction"
+                            ],
+                            "properties": {
+                              "presence": {
+                                "enum": [
+                                  "optional",
+                                  "required"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "required": [
+                              "presence"
+                            ],
+                            "properties": {
+                              "presence": {
+                                "enum": [
+                                  "illegal"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "onTarget": {
+                        "type": "object",
+                        "properties": {
+                          "direction": {
+                            "enum": [
+                              "in",
+                              "out"
+                            ]
+                          },
+                          "width": {
+                            "oneOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        },
+                        "oneOf": [
+                          {
+                            "required": [
+                              "direction"
+                            ],
+                            "properties": {
+                              "presence": {
+                                "enum": [
+                                  "optional",
+                                  "required"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "required": [
+                              "presence"
+                            ],
+                            "properties": {
+                              "presence": {
+                                "enum": [
+                                  "illegal"
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "isAddress": {
+                        "description": "the port contains address information",
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "isData": {
+                        "description": "the port contains data information",
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "isClock": {
+                        "description": "port is a clock for this bus interface",
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "isReset": {
+                        "description": "port is a reset for this bus interface",
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "requiresDriver": {
+                        "description": "specifies whether the port requires a driver when used in a completed design",
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "defaultValue": {
+                        "description": "default logic value for this wire port",
+                        "type": "integer",
+                        "minimum": 0,
+                        "default": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "props": {
+            "type": "object",
+            "patternProperties": {
+              ".+": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "array",
+                      "boolean",
+                      "integer",
+                      "null",
+                      "number",
+                      "object",
+                      "string"
+                    ]
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "properties": {
+                    "type": "object"
+                  },
+                  "allOf": {
+                    "type": "array",
+                    "minItems": 1
+                  },
+                  "anyOf": {
+                    "type": "array",
+                    "minItems": 1
+                  },
+                  "oneOf": {
+                    "type": "array",
+                    "minItems": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "defs": {
+    "$id": "defs",
+    "catalog": {
+      "type": "object",
+      "title": "Catalog document",
+      "properties": {
+        "catalog": {
+          "type": "object",
+          "properties": {
+            "components": {
+              "type": "array",
+              "items": {
+                "$ref": "defs#/component"
+              }
+            },
+            "designs": {
+              "type": "array",
+              "items": {
+                "$ref": "defs#/design"
+              }
+            },
+            "busDefinitions": {
+              "type": "array",
+              "items": {
+                "$ref": "defs#/abstractionDefinition"
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "catalog"
+      ]
+    },
+    "component": {
+      "type": "object",
+      "title": "Component document",
+      "description": "\nComponent document collects information about a single hardware block without\nexpressing internal structure or hierarchy. Component document expressing following aspects:\n* name, version\n* top level ports\n* parameter schema\n* bus interfaces\n* memory regions\n* registers\n* clocks, resets\n* block generation flow\n* references to implementation, documentation, tests\n",
+      "required": [
+        "component"
+      ],
+      "properties": {
+        "component": {
+          "type": "object",
+          "required": [
+            "vendor",
+            "library",
+            "name",
+            "version"
+          ],
+          "properties": {
+            "vendor": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 256,
+              "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+            },
+            "library": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+            },
+            "version": {
+              "type": "string"
+            },
+            "busInterfaces": {
+              "type": "array",
+              "uniqueItemProperties": [
+                "name"
+              ],
+              "items": {
+                "$ref": "defs#/busInterface"
+              }
+            },
+            "model": {
+              "type": "object",
+              "required": [
+                "ports"
+              ],
+              "properties": {
+                "ports": {
+                  "title": "Ports",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "patternProperties": {
+                        ".+": {
+                          "oneOf": [
+                            {
+                              "type": "integer"
+                            },
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "object",
+                              "required": [
+                                "direction",
+                                "width"
+                              ],
+                              "properties": {
+                                "direction": {
+                                  "enum": [
+                                    "in",
+                                    "out",
+                                    "inout"
+                                  ]
+                                },
+                                "width": {
+                                  "oneOf": [
+                                    {
+                                      "type": "integer",
+                                      "minimum": 1
+                                    },
+                                    {
+                                      "type": "string"
+                                    }
+                                  ]
+                                },
+                                "analog": {
+                                  "enum": [
+                                    "in",
+                                    "out",
+                                    "inout"
+                                  ]
+                                },
+                                "displayName": {
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "uniqueItemProperties": [
+                        "name"
+                      ],
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "name",
+                          "wire"
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 256,
+                            "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                          },
+                          "wire": {
+                            "oneOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "object",
+                                "required": [
+                                  "direction",
+                                  "width"
+                                ],
+                                "properties": {
+                                  "direction": {
+                                    "enum": [
+                                      "in",
+                                      "out",
+                                      "inout"
+                                    ]
+                                  },
+                                  "width": {
+                                    "oneOf": [
+                                      {
+                                        "type": "integer",
+                                        "minimum": 1
+                                      },
+                                      {
+                                        "type": "string"
+                                      }
+                                    ]
+                                  },
+                                  "analog": {
+                                    "enum": [
+                                      "in",
+                                      "out",
+                                      "inout"
+                                    ]
+                                  },
+                                  "displayName": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "addressSpaces": {
+              "type": "array",
+              "uniqueItemProperties": [
+                "name"
+              ],
+              "items": {
+                "type": "object",
+                "title": "Address space",
+                "required": [
+                  "name",
+                  "range",
+                  "width"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                  },
+                  "range": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "width": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                }
+              }
+            },
+            "memoryMaps": {
+              "type": "array",
+              "uniqueItemProperties": [
+                "name"
+              ],
+              "items": {
+                "$ref": "defs#/memoryMap"
+              }
+            },
+            "componentGenerators": {
+              "type": "array"
+            },
+            "fileSets": {
+              "type": "object"
+            },
+            "parameters": {
+              "type": "array"
+            }
+          }
+        }
+      }
+    },
+    "design": {
+      "type": "object",
+      "title": "Desgin document",
+      "properties": {
+        "design": {
+          "type": "object",
+          "properties": {
+            "vendor": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 256,
+              "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+            },
+            "library": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+            },
+            "version": {
+              "type": "string"
+            },
+            "instances": {
+              "type": "array",
+              "uniqueItemProperties": [
+                "name"
+              ],
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                  },
+                  "ref": {
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "name",
+                  "ref"
+                ]
+              }
+            },
+            "connections": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                  },
+                  "source": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "target": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "import": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                  },
+                  "export": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                  }
+                }
+              }
+            },
+            "adHocConnections": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                  },
+                  "portReferences": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "kind": {
+                              "enum": [
+                                "internal"
+                              ]
+                            },
+                            "componentRef": {
+                              "type": "object"
+                            },
+                            "portRef": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 256,
+                              "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+                            }
+                          },
+                          "required": [
+                            "portRef",
+                            "componentRef"
+                          ]
+                        },
+                        {
+                          "properties": {
+                            "kind": {
+                              "enum": [
+                                "extrenal"
+                              ]
+                            },
+                            "portRef": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 256,
+                              "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+                            }
+                          },
+                          "required": [
+                            "portRef"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": [
+            "vendor",
+            "library",
+            "name",
+            "version"
+          ]
+        }
+      },
+      "required": [
+        "design"
+      ]
+    },
+    "abstractionDefinition": {
+      "type": "object",
+      "title": "Abstraction definition document",
+      "required": [
+        "abstractionDefinition"
+      ],
+      "properties": {
+        "abstractionDefinition": {
+          "type": "object",
+          "required": [
+            "name",
+            "version",
+            "vendor",
+            "library",
+            "busType",
+            "ports"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+            },
+            "version": {
+              "type": "string"
+            },
+            "vendor": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 256,
+              "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+            },
+            "library": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+            },
+            "busType": {
+              "type": "object",
+              "required": [
+                "name",
+                "version",
+                "vendor",
+                "library"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256,
+                  "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                },
+                "version": {
+                  "type": "string"
+                },
+                "vendor": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 256,
+                  "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+                },
+                "library": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256,
+                  "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+                }
+              }
+            },
+            "ports": {
+              "type": "object",
+              "patternProperties": {
+                ".+": {
+                  "type": "object",
+                  "required": [
+                    "description",
+                    "wire"
+                  ],
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "wire": {
+                      "type": "object",
+                      "properties": {
+                        "onMaster": {
+                          "type": "object",
+                          "properties": {
+                            "direction": {
+                              "enum": [
+                                "in",
+                                "out"
+                              ]
+                            },
+                            "width": {
+                              "oneOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "oneOf": [
+                            {
+                              "required": [
+                                "direction"
+                              ],
+                              "properties": {
+                                "presence": {
+                                  "enum": [
+                                    "optional",
+                                    "required"
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "required": [
+                                "presence"
+                              ],
+                              "properties": {
+                                "presence": {
+                                  "enum": [
+                                    "illegal"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "onSlave": {
+                          "type": "object",
+                          "properties": {
+                            "direction": {
+                              "enum": [
+                                "in",
+                                "out"
+                              ]
+                            },
+                            "width": {
+                              "oneOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "oneOf": [
+                            {
+                              "required": [
+                                "direction"
+                              ],
+                              "properties": {
+                                "presence": {
+                                  "enum": [
+                                    "optional",
+                                    "required"
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "required": [
+                                "presence"
+                              ],
+                              "properties": {
+                                "presence": {
+                                  "enum": [
+                                    "illegal"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "onInitiator": {
+                          "type": "object",
+                          "properties": {
+                            "direction": {
+                              "enum": [
+                                "in",
+                                "out"
+                              ]
+                            },
+                            "width": {
+                              "oneOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "oneOf": [
+                            {
+                              "required": [
+                                "direction"
+                              ],
+                              "properties": {
+                                "presence": {
+                                  "enum": [
+                                    "optional",
+                                    "required"
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "required": [
+                                "presence"
+                              ],
+                              "properties": {
+                                "presence": {
+                                  "enum": [
+                                    "illegal"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "onTarget": {
+                          "type": "object",
+                          "properties": {
+                            "direction": {
+                              "enum": [
+                                "in",
+                                "out"
+                              ]
+                            },
+                            "width": {
+                              "oneOf": [
+                                {
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "oneOf": [
+                            {
+                              "required": [
+                                "direction"
+                              ],
+                              "properties": {
+                                "presence": {
+                                  "enum": [
+                                    "optional",
+                                    "required"
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "required": [
+                                "presence"
+                              ],
+                              "properties": {
+                                "presence": {
+                                  "enum": [
+                                    "illegal"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "isAddress": {
+                          "description": "the port contains address information",
+                          "type": "boolean",
+                          "default": false
+                        },
+                        "isData": {
+                          "description": "the port contains data information",
+                          "type": "boolean",
+                          "default": false
+                        },
+                        "isClock": {
+                          "description": "port is a clock for this bus interface",
+                          "type": "boolean",
+                          "default": false
+                        },
+                        "isReset": {
+                          "description": "port is a reset for this bus interface",
+                          "type": "boolean",
+                          "default": false
+                        },
+                        "requiresDriver": {
+                          "description": "specifies whether the port requires a driver when used in a completed design",
+                          "type": "boolean",
+                          "default": false
+                        },
+                        "defaultValue": {
+                          "description": "default logic value for this wire port",
+                          "type": "integer",
+                          "minimum": 0,
+                          "default": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "props": {
+              "type": "object",
+              "patternProperties": {
+                ".+": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "enum": [
+                        "array",
+                        "boolean",
+                        "integer",
+                        "null",
+                        "number",
+                        "object",
+                        "string"
+                      ]
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "properties": {
+                      "type": "object"
+                    },
+                    "allOf": {
+                      "type": "array",
+                      "minItems": 1
+                    },
+                    "anyOf": {
+                      "type": "array",
+                      "minItems": 1
+                    },
+                    "oneOf": {
+                      "type": "array",
+                      "minItems": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "busDefinition": {
+      "type": "object",
+      "title": "Bus definition document",
+      "required": [
+        "busDefinition"
+      ],
+      "properties": {
+        "busDefinition": {
+          "type": "object",
+          "required": [
+            "name",
+            "version",
+            "vendor",
+            "library"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+            },
+            "version": {
+              "type": "string"
+            },
+            "vendor": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 256,
+              "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+            },
+            "library": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "busInterface": {
+      "type": "object",
+      "title": "Bus interface",
+      "required": [
+        "name",
+        "busType"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "interfaceMode": {
+          "enum": [
+            "master",
+            "slave",
+            "initiator",
+            "target",
+            "monitor",
+            null
+          ]
+        },
+        "memoryMapRef": {
+          "type": "string"
+        },
+        "busType": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "vendor",
+                "library",
+                "name",
+                "version"
+              ],
+              "properties": {
+                "vendor": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 256,
+                  "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+                },
+                "library": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256,
+                  "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256,
+                  "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                },
+                "version": {
+                  "type": "string"
+                }
+              }
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "abstractionTypes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "viewRef": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[a-zA-Z][:a-zA-Z0-9_-]*$"
+              },
+              "portMaps": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "patternProperties": {
+                      ".+": {
+                        "$ref": "defs#/bundle"
+                      }
+                    }
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "memoryMap": {
+      "type": "object",
+      "title": "Memory map",
+      "required": [
+        "name",
+        "addressBlocks"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+        },
+        "addressUnitBits": {
+          "enum": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            64,
+            128,
+            256,
+            512,
+            1024
+          ],
+          "default": 8
+        },
+        "addressBlocks": {
+          "type": "array",
+          "uniqueItemProperties": [
+            "name"
+          ],
+          "items": {
+            "type": "object",
+            "title": "Address block",
+            "required": [
+              "name",
+              "baseAddress",
+              "range",
+              "width"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+              },
+              "baseAddress": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "range": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "width": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "usage": {
+                "enum": [
+                  "memory",
+                  "register"
+                ]
+              },
+              "volatile": {
+                "type": "boolean"
+              },
+              "access": {
+                "description": "specifies the accessibility of the data in the address block",
+                "enum": [
+                  "read-write",
+                  "read-only",
+                  "write-only",
+                  "read-writeOnce",
+                  "writeOnce"
+                ]
+              },
+              "registers": {
+                "type": "array",
+                "uniqueItemProperties": [
+                  "name"
+                ],
+                "items": {
+                  "$ref": "defs#/register"
+                }
+              },
+              "registerFiles": {
+                "type": "array",
+                "uniqueItemProperties": [
+                  "name"
+                ],
+                "items": {
+                  "type": "object",
+                  "title": "Register file",
+                  "required": [
+                    "name",
+                    "addressOffset",
+                    "range"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256,
+                      "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                    },
+                    "addressOffset": {
+                      "oneOf": [
+                        {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 256
+                        },
+                        {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      ]
+                    },
+                    "range": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "registers": {
+                      "type": "array",
+                      "uniqueItemProperties": [
+                        "name"
+                      ],
+                      "items": {
+                        "$ref": "defs#/register"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "register": {
+      "type": "object",
+      "title": "Register",
+      "required": [
+        "name",
+        "addressOffset",
+        "size"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+        },
+        "addressOffset": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            }
+          ]
+        },
+        "size": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            }
+          ]
+        },
+        "access": {
+          "description": "specifies the accessibility of the data in the address block",
+          "enum": [
+            "read-write",
+            "read-only",
+            "write-only",
+            "read-writeOnce",
+            "writeOnce"
+          ]
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "array",
+          "uniqueItemProperties": [
+            "name"
+          ],
+          "items": {
+            "type": "object",
+            "title": "Register field",
+            "required": [
+              "name",
+              "bitOffset",
+              "bitWidth"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256,
+                "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+              },
+              "description": {
+                "type": "string"
+              },
+              "bitOffset": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                ]
+              },
+              "resetValue": {
+                "type": "integer"
+              },
+              "bitWidth": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                ]
+              },
+              "volatile": {
+                "type": "boolean"
+              },
+              "access": {
+                "description": "specifies the accessibility of the data in the address block",
+                "enum": [
+                  "read-write",
+                  "read-only",
+                  "write-only",
+                  "read-writeOnce",
+                  "writeOnce"
+                ]
+              },
+              "enumeratedValues": {
+                "type": "array",
+                "uniqueItemProperties": [
+                  "name"
+                ],
+                "items": {
+                  "type": "object",
+                  "title": "Enumerated values",
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256,
+                      "pattern": "^[_:A-Za-z][-._:A-Za-z0-9]*$"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "displayName": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              },
+              "modifiedWriteValue": {
+                "description": "manipulation of data written to a field",
+                "enum": [
+                  "oneToClear",
+                  "oneToSet",
+                  "oneToToggle",
+                  "zeroToClear",
+                  "zeroToSet",
+                  "zeroToToggle",
+                  "clear",
+                  "set",
+                  "modify"
+                ]
+              },
+              "readAction": {
+                "description": "an action that happens to a field after a read operation happens",
+                "enum": [
+                  "clear",
+                  "set",
+                  "modify"
+                ]
+              },
+              "testable": {
+                "type": "boolean"
+              },
+              "reserved": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "resetValue": {
+          "type": "integer"
+        }
+      }
+    },
+    "bundle": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "type": "object",
+          "patternProperties": {
+            ".+": {
+              "$ref": "defs#/bundle"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

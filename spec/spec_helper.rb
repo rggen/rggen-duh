@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
+require 'stringio'
 require 'rggen/devtools/spec_helper'
+require 'support/shared_contexts'
 
 require 'rggen/core'
 
