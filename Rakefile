@@ -12,7 +12,7 @@ task :build_schema do
   Dir.chdir(File.join(root, 'duh-schema', 'bin')) do
     system('./prepare.js')
     FileUtils.move(
-      './dist/schema.json', File.join(root, 'lib', 'rggen', 'duh')
+      './dist/schema.json', File.join(root, 'lib', 'rggen', 'duh', 'duh-schema')
     )
   end
 end

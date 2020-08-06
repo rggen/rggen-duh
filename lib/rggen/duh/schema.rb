@@ -15,9 +15,14 @@ module RgGen
         end
 
         def build_schema
-          schema_data = JSON.parse(File.read(File.join(__dir__, 'schema.json')))
+          schema_data = read_schema
           resolver = ->(uri) { uri.path == 'defs' && schema_data['defs'] || nil }
           JSONSchemer.schema(schema_data['component'], ref_resolver: resolver)
+        end
+
+        def read_schema
+          path = File.join(__dir__, 'duh-schema', 'schema.json')
+          JSON.parse(File.read(path))
         end
       end
     end
