@@ -3,16 +3,6 @@
 module RgGen
   module DUH
     module Schema
-      class DefsResolver
-        def initialize(defs)
-          @defs = defs
-        end
-
-        def call(url)
-          url.path == 'defs' && @defs || nil
-        end
-      end
-
       class << self
         def validate(duh)
           schema.validate(duh).to_a
@@ -26,7 +16,7 @@ module RgGen
 
         def build_schema
           schema_data = JSON.parse(File.read(File.join(__dir__, 'schema.json')))
-          resolver = DefsResolver.new(schema_data['defs'])
+          resolver = ->(uri) { uri.path == 'defs' && schema_data['defs'] || nil }
           JSONSchemer.schema(schema_data['component'], ref_resolver: resolver)
         end
       end
