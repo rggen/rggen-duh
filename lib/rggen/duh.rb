@@ -12,6 +12,7 @@ require_relative 'duh/loader'
 module RgGen
   module DUH
     EXTRACTORS = [
+      'duh/extractor/bit_assignment',
       'duh/extractor/simple_extractors'
     ].freeze
 
