@@ -1,4 +1,5 @@
 {
+  byte_size: ['range', [:register_block]],
   comment: ['description', [:register]],
   name: ['name'],
   offset_address: ['addressOffset', [:register_file, :register]]
