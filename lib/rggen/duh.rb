@@ -12,8 +12,7 @@ require_relative 'duh/loader'
 module RgGen
   module DUH
     EXTRACTORS = [
-      'duh/extractor/comment',
-      'duh/extractor/name'
+      'duh/extractor/simple_extractors'
     ].freeze
 
     def self.register_loader(builder)
