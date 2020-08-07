@@ -2,7 +2,7 @@
 
 {
   byte_size: ['range', [:register_block]],
-  comment: ['description', [:register]],
+  comment: ['description', [:register, :bit_field]],
   initial_value: ['resetValue', [:bit_field]],
   name: ['name'],
   offset_address: ['addressOffset', [:register_file, :register]]
