@@ -5,6 +5,15 @@ RSpec.describe RgGen::DUH::Loader do
 
   let(:loader) { described_class.new(extractors, {}) }
 
+  let(:extractors) do
+    [
+      create_extracter([:register_block, :register_file, :register, :bit_field], :name) { |v| v['name'] },
+      create_extracter([:register_block], :baseAddress) { |v| v['baseAddress'] },
+      create_extracter([:register_file, :register], :addressOffset) { |v| v['addressOffset'] },
+      create_extracter([:bit_field], :bitOffset) { |v| v['bitOffset'] }
+    ]
+  end
+
   let(:valid_value_lists) do
     {
       root: [],
@@ -15,13 +24,8 @@ RSpec.describe RgGen::DUH::Loader do
     }
   end
 
-  let(:extractors) do
-    [
-      create_extracter([:register_block, :register_file, :register, :bit_field], :name) { |v| v['name'] },
-      create_extracter([:register_block], :baseAddress) { |v| v['baseAddress'] },
-      create_extracter([:register_file, :register], :addressOffset) { |v| v['addressOffset'] },
-      create_extracter([:bit_field], :bitOffset) { |v| v['bitOffset'] }
-    ]
+  let(:input_data) do
+    RgGen::Core::RegisterMap::InputData.new(:root, valid_value_lists)
   end
 
   def create_extracter(target_layers, target_value, &body)
@@ -38,10 +42,6 @@ RSpec.describe RgGen::DUH::Loader do
   end
 
   describe '#load_file' do
-    let(:file_name) do
-      'test.json5'
-    end
-
     let(:duh) do
       <<~'DUH'
         {
@@ -142,7 +142,7 @@ RSpec.describe RgGen::DUH::Loader do
     end
 
     it '入力したDUHファイルをもとに、入力データを組み立てる' do
-      setup_duh_file(file_name, duh)
+      setup_duh_file(duh)
       loader.load_file(file_name, input_data, valid_value_lists)
 
       expect(register_blocks[0])
@@ -164,7 +164,7 @@ RSpec.describe RgGen::DUH::Loader do
     end
 
     it 'JSON Referenceに対応する' do
-      setup_duh_file(file_name, duh_with_json_ref)
+      setup_duh_file(duh_with_json_ref)
       loader.load_file(file_name, input_data, valid_value_lists)
 
       expect(register_blocks[0])
@@ -195,7 +195,7 @@ RSpec.describe RgGen::DUH::Loader do
       end
 
       it 'ValidationFailedを発生させる' do
-        setup_duh_file(file_name, invalid_duh)
+        setup_duh_file(invalid_duh)
         expect {
           loader.load_file(file_name, input_data, valid_value_lists)
         }.to raise_error RgGen::DUH::ValidationFailed, <<~MESSAGE.strip

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_context 'duh common' do
-  def setup_duh_file(file_name, contents)
+  def setup_duh_file(contents)
     io = StringIO.new(+contents)
     allow(File).to receive(:open).with(file_name, 'r').and_yield(io)
     allow(File).to receive(:readable?).with(file_name).and_return(true)
@@ -14,8 +14,26 @@ RSpec.shared_context 'duh common' do
     ]
   end
 
+  let(:factory) do
+    RgGen.builder.build_factory(:input, :register_map)
+  end
+
+  let(:valid_value_lists) do
+    factory.__send__(:valid_value_lists)
+  end
+
   let(:input_data) do
-    RgGen::Core::RegisterMap::InputData.new(:root, valid_value_lists)
+    factory.__send__(:create_input_data)
+  end
+
+  let(:loader) do
+    l = factory.loaders.find { |loader| loader.support?(file_name) }
+    l.disable_validation
+    l
+  end
+
+  let(:file_name) do
+    'test.json5'
   end
 
   let(:register_blocks) do

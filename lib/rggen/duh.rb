@@ -8,3 +8,24 @@ require_relative 'duh/version'
 require_relative 'duh/validation_failed'
 require_relative 'duh/schema'
 require_relative 'duh/loader'
+
+module RgGen
+  module DUH
+    EXTRACTORS = [
+      'duh/extractor/name'
+    ].freeze
+
+    def self.register_loader(builder)
+      builder.register_loader(:register_map, :duh, Loader)
+    end
+
+    def self.load_extractors
+      EXTRACTORS.each { |file| require_relative(file) }
+    end
+
+    def self.default_setup(builder)
+      register_loader(builder)
+      load_extractors
+    end
+  end
+end

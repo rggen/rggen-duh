@@ -18,3 +18,4 @@ RSpec.configure do |config|
 end
 
 require 'rggen/duh'
+RgGen::DUH.default_setup(builder)

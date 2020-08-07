@@ -5,19 +5,27 @@ module RgGen
     class Loader < Core::RegisterMap::Loader
       support_types [:json5]
 
+      def disable_validation
+        @disable_validation = true
+      end
+
       private
 
       def read_file(file_name)
         duh = read_duh(file_name)
-        validate(duh, file_name)
+        validation? && validate(duh, file_name) || duh
       end
 
       def read_duh(file_name)
         JsonRefs.call(RbJSON5.load_file(file_name))
       end
 
+      def validation?
+        !@disable_validation
+      end
+
       def validate(duh, file_name)
-        errors = Schema.validate(duh)
+        errors = validation? && Schema.validate(duh)
         errors.empty? && duh ||
           (raise ValidationFailed.new(file_name, errors))
       end
