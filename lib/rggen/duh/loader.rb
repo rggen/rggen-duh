@@ -45,23 +45,44 @@ module RgGen
       end
 
       def collect_register_block_data(read_data)
+        collect_address_blocks(read_data)
+          &.select { |address_block| address_block['usage'] == 'register' }
+          &.map { |data| add_parent_and_layer_properties(data, nil, :register_block) }
+      end
+
+      def collect_address_blocks(read_data)
         read_data
           .dig('component', 'memoryMaps')
           &.flat_map { |memory_map| memory_map['addressBlocks'] }
           &.compact
-          &.select { |address_block| address_block['usage'] == 'register' }
       end
 
       def collect_register_file_data(read_data)
-        read_data['registerFiles']
+        read_data['registerFiles']&.map do |data|
+          add_parent_and_layer_properties(data, read_data, :register_file)
+        end
       end
 
       def collect_register_data(read_data)
-        read_data['registers']
+        read_data['registers']&.map do |data|
+          add_parent_and_layer_properties(data, read_data, :register)
+        end
       end
 
       def collect_bit_field_data(read_data)
-        read_data['fields']
+        read_data['fields']&.map do |data|
+          add_parent_and_layer_properties(data, read_data, :bit_field)
+        end
+      end
+
+      def add_parent_and_layer_properties(data, parent, layer)
+        data.instance_variable_set(:@parent, parent)
+        data.instance_variable_set(:@layer, layer)
+        class << data
+          attr_reader :parent
+          attr_reader :layer
+        end
+        data
       end
     end
   end

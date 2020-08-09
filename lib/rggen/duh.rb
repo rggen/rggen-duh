@@ -13,7 +13,8 @@ module RgGen
   module DUH
     EXTRACTORS = [
       'duh/extractor/bit_assignment',
-      'duh/extractor/simple_extractors'
+      'duh/extractor/simple_extractors',
+      'duh/extractor/type'
     ].freeze
 
     def self.register_loader(builder)
