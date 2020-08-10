@@ -19,3 +19,7 @@ end
 
 require 'rggen/duh'
 RgGen::DUH.default_setup(builder)
+
+RGGEN_ROOT = ENV['RGGEN_ROOT'] || File.expand_path('../..', __dir__)
+RGGEN_DUH_ROOT = File.expand_path('..', __dir__)
+RGGEN_SAMPLE_DIRECTORY = File.join(RGGEN_ROOT, 'rggen-sample')
