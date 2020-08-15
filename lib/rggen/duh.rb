@@ -11,6 +11,8 @@ require_relative 'duh/loader'
 
 module RgGen
   module DUH
+    PLUGIN_NAME = :'rggen-duh'
+
     EXTRACTORS = [
       'duh/extractor/bit_assignment',
       'duh/extractor/simple_extractors',

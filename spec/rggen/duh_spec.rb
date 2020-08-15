@@ -64,4 +64,21 @@ RSpec.describe RgGen::DUH do
       expect(bit_field).to have_property(:type, :ro)
     end
   end
+
+  describe '既定セットアップ' do
+    before do
+      @original_builder = RgGen.builder
+      RgGen.builder(RgGen::Core::Builder.create)
+    end
+
+    after do
+      RgGen.builder(@original_builder)
+    end
+
+    it 'DUHサポートを有効にする' do
+      expect(RgGen::DUH).to receive(:register_loader).and_call_original
+      expect(RgGen::DUH).to receive(:load_extractors).and_call_original
+      RgGen.builder.load_plugins(['rggen-duh'], true)
+    end
+  end
 end
