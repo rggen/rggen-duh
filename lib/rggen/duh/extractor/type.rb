@@ -38,6 +38,14 @@ RgGen.define_value_extractor(:register_map, :duh, :bit_field, :type) do
       access: 'read-write', modified_write_value: 'oneToSet',
       read_action: 'default', reserved: false
     },
+    w0t: {
+      access: 'read-write', modified_write_value: 'zeroToToggle',
+      read_action: 'default', reserved: false
+    },
+    w1t: {
+      access: 'read-write', modified_write_value: 'oneToToggle',
+      read_action: 'default', reserved: false
+    },
     w0crs: {
       access: 'read-write', modified_write_value: 'zeroToClear',
       read_action: 'set', reserved: false

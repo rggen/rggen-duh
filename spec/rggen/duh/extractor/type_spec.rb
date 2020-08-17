@@ -26,6 +26,8 @@ RSpec.describe 'extractor/type' do
                   { access: 'read-only', readAction: 'set' },
                   { access: 'read-write', modifiedWriteValue: 'zeroToSet' },
                   { access: 'read-write', modifiedWriteValue: 'oneToSet' },
+                  { access: 'read-write', modifiedWriteValue: 'zeroToToggle' },
+                  { access: 'read-write', modifiedWriteValue: 'oneToToggle' },
                   { access: 'read-write', modifiedWriteValue: 'zeroToClear', readAction: 'set' },
                   { access: 'read-write', modifiedWriteValue: 'oneToClear', readAction: 'set' },
                   { access: 'read-write', modifiedWriteValue: 'zeroToSet', readAction: 'clear' },
@@ -45,7 +47,7 @@ RSpec.describe 'extractor/type' do
     loader.load_file(file_name, input_data, valid_value_lists)
 
     [
-      :rw, :ro, :wo, :rc, :w0c, :w1c, :rs, :w0s, :w1s,
+      :rw, :ro, :wo, :rc, :w0c, :w1c, :rs, :w0s, :w1s, :w0t, :w1t,
       :w0crs, :w1crs, :w0src, :w1src, :w1, :wo1, :reserved
     ].each_with_index do |type, i|
       expect(bit_fields[i]).to have_value(:type, type)
