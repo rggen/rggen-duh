@@ -1,44 +1,57 @@
-# Rggen::Duh
+[![Gem Version](https://badge.fury.io/rb/rggen-duh.svg)](https://badge.fury.io/rb/rggen-duh)
+[![CI](https://github.com/rggen/rggen-duh/workflows/CI/badge.svg)](https://github.com/rggen/rggen-duh/actions?query=workflow%3ACI)
+[![Maintainability](https://api.codeclimate.com/v1/badges/7a4090f4a7c21d29036c/maintainability)](https://codeclimate.com/github/rggen/rggen-duh/maintainability)
+[![codecov](https://codecov.io/gh/rggen/rggen-duh/branch/master/graph/badge.svg)](https://codecov.io/gh/rggen/rggen-duh)
+[![Gitter](https://badges.gitter.im/rggen/rggen.svg)](https://gitter.im/rggen/rggen?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rggen/duh`. To experiment with that code, run `bin/console` for an interactive prompt.
 
-TODO: Delete this and the text above, and describe your gem
+# RgGen::DUH
+
+RgGen::DUH adds ability to load register map documents written in [DUH](https://github.com/sifive/duh) format.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+To install RgGen::DUH and required libraries, use the following command:
 
-```ruby
-gem 'rggen-duh'
 ```
-
-And then execute:
-
-    $ bundle install
-
-Or install it yourself as:
-
-    $ gem install rggen-duh
+$ gem install rggen-duh
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+You need to tell RgGen to load RgGen::DUH. There are two ways to do this:
 
-## Development
+### `--plugin` runtime option
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```
+$ rggen --plugin rggen-duh your_duh.json5
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+### `RGGEN_PLUGINS` environment variable
 
-## Contributing
+```
+$ export RGGEN_PLUGINS=${RGGEN_PLUGINS}:rggen-duh
+$ rggen your_duh.json5
+```
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rggen-duh. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/rggen-duh/blob/master/CODE_OF_CONDUCT.md).
+## Contact
 
+Feedbacks, bug reports, questions and etc. are wellcome! You can post them by using following ways:
 
-## License
+* [GitHub Issue Tracker](https://github.com/rggen/rggen-duh/issues)
+* [Chat Room](https://gitter.im/rggen/rggen)
+* [Mailing List](https://groups.google.com/d/forum/rggen)
+* [Mail](mailto:rggen@googlegroups.com)
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+## Copyright & License
+
+Copyright &copy; 2020 Taichi Ishitani. RgGen::DUH is licensed under the [MIT License](https://opensource.org/licenses/MIT), see [LICENSE](LICENSE) for futher details.
+
+## Notice
+
+RgGen::DUH includes the product generated from [duh-schema](https://github.com/sifive/duh-schema).
+See [lib/rggen/duh/duh-schema/README.md](lib/rggen/duh/duh-schema/README.md) for futher details.
 
 ## Code of Conduct
 
-Everyone interacting in the Rggen::Duh project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/rggen-duh/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Rggen::Duh project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/rggen/rggen-duh/blob/master/CODE_OF_CONDUCT.md).
