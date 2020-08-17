@@ -12,12 +12,9 @@ module RgGen
       private
 
       def read_file(file_name)
-        duh = read_duh(file_name)
-        validation? && validate(duh, file_name) || duh
-      end
-
-      def read_duh(file_name)
-        JsonRefs.call(RbJSON5.load_file(file_name))
+        duh = JsonRefs.call(RbJSON5.load_file(file_name))
+        validation? && validate(duh, file_name)
+        duh
       end
 
       def validation?
@@ -25,9 +22,8 @@ module RgGen
       end
 
       def validate(duh, file_name)
-        errors = validation? && Schema.validate(duh)
-        errors.empty? && duh ||
-          (raise ValidationFailed.new(file_name, errors))
+        errors = Schema.validate(duh)
+        errors.empty? || (raise ValidationFailed.new(file_name, errors))
       end
 
       SUB_LAYERS = {
