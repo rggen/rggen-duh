@@ -12,7 +12,7 @@ module RgGen
       private
 
       def read_file(file_name)
-        duh = JsonRefs.call(RbJSON5.load_file(file_name))
+        duh = JsonRefs.dereference(RbJSON5.load_file(file_name))
         validation? && validate(duh, file_name)
         duh
       end
