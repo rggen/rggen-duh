@@ -34,6 +34,44 @@ $ export RGGEN_PLUGINS=${RGGEN_PLUGINS}:rggen-duh
 $ rggen your_duh.json5
 ```
 
+## Supported Bit Field Types
+
+Following table describes which RgGen bit field types are supported by DUH format and corresponeded DUH properties.
+
+| RgGen bit field type | Support? | access         | modifiedWriteValue | readAction    | reserved |
+|:---------------------|:---------|:---------------|:-------------------|:--------------|:---------|
+| rw                   | yes      | read-write     | not specified      | not specified | no       |
+| ro                   | yes      | read-only      | don't care         | not specified | no       |
+| rof                  | no       |                |                    |               | no       |
+| wo                   | yes      | write-only     | not specified      | don't care    | no       |
+| wrc                  | yes      | read-write     | not specified      | clear         | no       |
+| wrs                  | yes      | read-write     | not specified      | set           | no       |
+| rc                   | yes      | read-only      | don't care         | clear         | no       |
+| w0c                  | yes      | read-write     | zeroToClear        | not specified | no       |
+| w1c                  | yes      | read-write     | oneToClear         | not specified | no       |
+| wc                   | yes      | read-write     | clear              | not specified | no       |
+| woc                  | yes      | write-only     | clear              | don't care    | no       |
+| rs                   | yes      | read-only      | don't care         | set           | no       |
+| w0s                  | yes      | read-write     | zeroToSet          | not specified | no       |
+| w1s                  | yes      | read-write     | oneToSet           | not specified | no       |
+| ws                   | yes      | read-write     | set                | not specified | no       |
+| wos                  | yes      | write-only     | set                | don't care    | no       |
+| rwc                  | no       |                |                    |               |          |
+| rwe                  | no       |                |                    |               |          |
+| rwl                  | no       |                |                    |               |          |
+| rws                  | no       |                |                    |               |          |
+| w0crs                | yes      | read-write     | zeroToClear        | set           | no       |
+| w1crs                | yes      | read-write     | oneToClear         | set           | no       |
+| wcrs                 | yes      | read-write     | clear              | set           | no       |
+| w0src                | yes      | read-write     | zeroToSet          | clear         | no       |
+| w1src                | yes      | read-write     | oneToSet           | clear         | no       |
+| wsrc                 | yes      | read-write     | set                | clear         | no       |
+| w0trg                | no       |                |                    |               |          |
+| w1trg                | no       |                |                    |               |          |
+| w1                   | yes      | read-writeOnce | not specified      | not specified | no       |
+| wo1                  | yes      | writeOnce      | not specified      | don't care    | no       |
+| reserved             | yes      | don't care     | don't care         | don't care    | yes      |
+
 ## Contact
 
 Feedbacks, bug reports, questions and etc. are wellcome! You can post them by using following ways:
