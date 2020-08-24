@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "rggen-dut-#{RgGen::DUH::VERSION}"
   spec.description = 'DUH support for RgGen'
-  spec.homepage = 'https://github.com/rggen/rggen-dut'
+  spec.homepage = 'https://github.com/rggen/rggen-duh'
   spec.license = 'MIT'
 
   spec.metadata = {
