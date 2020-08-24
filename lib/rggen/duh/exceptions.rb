@@ -8,19 +8,10 @@ module RgGen
       end
     end
 
-    class ValidationFailed < RgGen::Core::LoadError
-      def initialize(file_name, errors)
-        super("input DUH file is invalid: #{file_name}")
-        @errors = errors
-      end
-
-      attr_reader :errors
-
-      def to_s
-        [
-          super,
-          *errors.map { |error| "  - #{JSONSchemer::Errors.pretty(error)}" }
-        ].join("\n")
+    class ValidationError < RgGen::Core::LoadError
+      def initialize(message, file_name, errors)
+        error_info = errors.map(&JSONSchemer::Errors.method(:pretty)).join("\n")
+        super(message, file_name, error_info)
       end
     end
   end

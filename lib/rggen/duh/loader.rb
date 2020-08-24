@@ -30,7 +30,8 @@ module RgGen
 
       def validate(duh, file_name)
         errors = Schema.validate(duh)
-        errors.empty? || (raise ValidationFailed.new(file_name, errors))
+        errors.empty? ||
+          (raise ValidationError.new('input DUH file is invalid', file_name, errors))
       end
 
       SUB_LAYERS = {

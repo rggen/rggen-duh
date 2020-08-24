@@ -225,14 +225,22 @@ RSpec.describe RgGen::DUH::Loader do
         DUH
       end
 
-      it 'ValidationFailedを発生させる' do
+      before do
         setup_duh_file(invalid_duh)
+      end
+
+      it 'ValidationErrorを発生させる' do
         expect {
           loader.load_file(file_name, input_data, valid_value_lists)
-        }.to raise_error RgGen::DUH::ValidationFailed, <<~MESSAGE.strip
-          input DUH file is invalid: #{file_name}
-            - property '/component' is missing required keys: vendor, library, name, version
-        MESSAGE
+        }.to raise_error RgGen::DUH::ValidationError, "input DUH file is invalid -- #{file_name}"
+      end
+
+      specify '原因が#verbose_infoに設定される' do
+        begin
+          loader.load_file(file_name, input_data, valid_value_lists)
+        rescue RgGen::DUH::ValidationError => e
+          expect(e.verbose_info).to eq "property '/component' is missing required keys: vendor, library, name, version"
+        end
       end
     end
   end
