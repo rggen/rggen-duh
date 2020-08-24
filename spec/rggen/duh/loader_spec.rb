@@ -185,6 +185,37 @@ RSpec.describe RgGen::DUH::Loader do
         .to have_value(:name, 'omask').and have_value(:bitOffset, 8)
     end
 
+    context '文法エラーを含むDUHファイルが入力された場合' do
+      let(:duh_with_syntax_error) do
+        <<~'DUH'
+          { foo bar }
+        DUH
+      end
+
+      before do
+        setup_duh_file(duh_with_syntax_error)
+      end
+
+      it 'ParseErrorを発生させる' do
+        expect {
+          loader.load_file(file_name, input_data, valid_value_lists)
+        }.to raise_error RgGen::DUH::ParseError, <<~MESSAGE.strip
+          Failed to match sequence (SPACE? VALUE SPACE?) at line 1 char 1. -- #{file_name}
+        MESSAGE
+      end
+
+      specify '詳細が#verbose_infoに設定される' do
+        begin
+          loader.load_file(file_name, input_data, valid_value_lists)
+        rescue RgGen::DUH::ParseError => e
+          expect(e.verbose_info).to eq <<~INFO.strip
+            Failed to match sequence (SPACE? VALUE SPACE?) at line 1 char 1.
+            `- Expected ":", but got "b" at line 1 char 7.
+          INFO
+        end
+      end
+    end
+
     context '不正なDUHファイルが入力された場合' do
       let(:invalid_duh) do
         <<~'DUH'

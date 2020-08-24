@@ -12,9 +12,16 @@ module RgGen
       private
 
       def read_file(file_name)
-        duh = JsonRefs.dereference(RbJSON5.load_file(file_name))
+        duh = load_json5(file_name)
         validation? && validate(duh, file_name)
         duh
+      end
+
+      def load_json5(file_name)
+        JsonRefs.dereference(RbJSON5.load_file(file_name))
+      rescue RbJSON5::ParseError => e
+        reason = e.parse_failure_cause.ascii_tree.strip
+        raise ParseError.new(e.message, file_name, reason)
       end
 
       def validation?
