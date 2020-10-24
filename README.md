@@ -4,7 +4,6 @@
 [![codecov](https://codecov.io/gh/rggen/rggen-duh/branch/master/graph/badge.svg)](https://codecov.io/gh/rggen/rggen-duh)
 [![Gitter](https://badges.gitter.im/rggen/rggen.svg)](https://gitter.im/rggen/rggen?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-
 # RgGen::DUH
 
 RgGen::DUH adds ability to load register map documents written in [DUH](https://github.com/sifive/duh) format.
@@ -92,4 +91,4 @@ See [lib/rggen/duh/duh-schema/README.md](lib/rggen/duh/duh-schema/README.md) for
 
 ## Code of Conduct
 
-Everyone interacting in the Rggen::Duh project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/rggen/rggen-duh/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the RgGen::Duh project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/rggen/rggen-duh/blob/master/CODE_OF_CONDUCT.md).
