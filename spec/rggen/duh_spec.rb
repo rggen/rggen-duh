@@ -75,9 +75,10 @@ RSpec.describe RgGen::DUH do
       RgGen.builder(@original_builder)
     end
 
+    let(:builder) { RgGen.builder }
+
     it 'DUHサポートを有効にする' do
-      expect(RgGen::DUH).to receive(:register_loader).and_call_original
-      expect(RgGen::DUH).to receive(:load_extractors).and_call_original
+      expect(RgGen::DUH.plugin_spec).to receive(:activate).with(equal(builder))
       RgGen.builder.load_plugins(['rggen-duh'], true)
     end
   end

@@ -11,25 +11,15 @@ require_relative 'duh/loader'
 
 module RgGen
   module DUH
-    PLUGIN_NAME = :'rggen-duh'
+    extend Core::Plugin
 
-    EXTRACTORS = [
-      'duh/extractor/bit_assignment',
-      'duh/extractor/simple_extractors',
-      'duh/extractor/type'
-    ].freeze
-
-    def self.register_loader(builder)
-      builder.register_loader(:register_map, :duh, Loader)
-    end
-
-    def self.load_extractors
-      EXTRACTORS.each { |file| require_relative(file) }
-    end
-
-    def self.default_setup(builder)
-      register_loader(builder)
-      load_extractors
+    setup_plugin :'rggen-duh' do |plugin|
+      plugin.register_loader :register_map, :duh, Loader
+      plugin.files [
+        'duh/extractor/bit_assignment',
+        'duh/extractor/simple_extractors',
+        'duh/extractor/type'
+      ]
     end
   end
 end
