@@ -82,7 +82,7 @@ Feedbacks, bug reports, questions and etc. are wellcome! You can post them by us
 
 ## Copyright & License
 
-Copyright &copy; 2020 Taichi Ishitani. RgGen::DUH is licensed under the [MIT License](https://opensource.org/licenses/MIT), see [LICENSE](LICENSE) for futher details.
+Copyright &copy; 2020-2021 Taichi Ishitani. RgGen::DUH is licensed under the [MIT License](https://opensource.org/licenses/MIT), see [LICENSE](LICENSE) for futher details.
 
 ## Notice
 
