@@ -3,9 +3,6 @@
 module RgGen
   module DUH
     class ParseError < RgGen::Core::LoadError
-      def initialize(message, file_name, reason)
-        super(message, file_name, reason)
-      end
     end
 
     class ValidationError < RgGen::Core::LoadError
