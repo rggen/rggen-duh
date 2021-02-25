@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.5'
 
   spec.add_runtime_dependency 'json_refs', '>= 0.1.4'
-  spec.add_runtime_dependency 'json_schemer', '>= 0.2.12'
+  spec.add_runtime_dependency 'json_schemer', '>= 0.2.17'
   spec.add_runtime_dependency 'rb_json5', '>= 0.3.0'
 
   spec.add_development_dependency 'bundler'
