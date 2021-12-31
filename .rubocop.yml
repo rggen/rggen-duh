@@ -10,9 +10,6 @@ inherit_from:
   - .rubocop_todo.yml
 <% end %>
 
-AllCops:
-  TargetRubyVersion: 2.5
-
 Metrics/BlockLength:
   IgnoredMethods:
     - define_value_extractor
