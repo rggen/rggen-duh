@@ -40,9 +40,14 @@ Following table describes which RgGen bit field types are supported by DUH forma
 | RgGen bit field type | Support? | access         | modifiedWriteValue | readAction    | reserved |
 |:---------------------|:---------|:---------------|:-------------------|:--------------|:---------|
 | rw                   | yes      | read-write     | not specified      | not specified | no       |
+| rwtrg                | no       |                |                    |               |          |
 | ro                   | yes      | read-only      | don't care         | not specified | no       |
-| rof                  | no       |                |                    |               | no       |
+| rotrg                | no       |                |                    |               |          |
+| rowo                 | no       |                |                    |               |          |
+| rowotrg              | no       |                |                    |               |          |
+| rof                  | no       |                |                    |               |          |
 | wo                   | yes      | write-only     | not specified      | don't care    | no       |
+| wotrg                | no       |                |                    |               |          |
 | wrc                  | yes      | read-write     | not specified      | clear         | no       |
 | wrs                  | yes      | read-write     | not specified      | set           | no       |
 | rc                   | yes      | read-only      | don't care         | clear         | no       |
