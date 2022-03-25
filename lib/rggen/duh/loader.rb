@@ -42,9 +42,14 @@ module RgGen
       }.freeze
 
       def format_sub_layer_data(read_data, layer, _file)
-        SUB_LAYERS[layer]&.each_with_object({}) do |sub_layer, sub_layer_data|
-          data = __send__("collect_#{sub_layer}_data", read_data)
-          data && (sub_layer_data[sub_layer] = data)
+        SUB_LAYERS[layer]&.each_with_object([]) do |sub_layer, sub_layer_data|
+          data =
+            if layer == :root
+              collect_register_block_data(read_data)
+            else
+              collect_sub_layer_data(read_data, sub_layer)
+            end
+          data && sub_layer_data.concat([sub_layer].product(data))
         end
       end
 
@@ -61,21 +66,15 @@ module RgGen
           &.compact
       end
 
-      def collect_register_file_data(read_data)
-        read_data['registerFiles']&.map do |data|
-          add_parent_and_layer_properties(data, read_data, :register_file)
-        end
-      end
+      KEY_MAP = {
+        register_file: 'registerFiles',
+        register: 'registers',
+        bit_field: 'fields'
+      }.freeze
 
-      def collect_register_data(read_data)
-        read_data['registers']&.map do |data|
-          add_parent_and_layer_properties(data, read_data, :register)
-        end
-      end
-
-      def collect_bit_field_data(read_data)
-        read_data['fields']&.map do |data|
-          add_parent_and_layer_properties(data, read_data, :bit_field)
+      def collect_sub_layer_data(read_data, sub_layer)
+        read_data[KEY_MAP[sub_layer]]&.map do |data|
+          add_parent_and_layer_properties(data, read_data, sub_layer)
         end
       end
 
