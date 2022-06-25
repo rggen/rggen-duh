@@ -9,17 +9,16 @@ require_relative 'duh/exceptions'
 require_relative 'duh/schema'
 require_relative 'duh/loader'
 
-module RgGen
-  module DUH
-    extend Core::Plugin
+RgGen.setup_plugin :'rggen-duh' do |plugin|
+  plugin.version RgGen::DUH::VERSION
 
-    setup_plugin :'rggen-duh' do |plugin|
-      plugin.register_loader :register_map, :duh, Loader
-      plugin.files [
-        'duh/extractor/bit_assignment',
-        'duh/extractor/simple_extractors',
-        'duh/extractor/type'
-      ]
-    end
+  plugin.setup_loader :register_map, :duh do |entry|
+    entry.register_loader RgGen::DUH::Loader
   end
+
+  plugin.files [
+    'duh/extractor/bit_assignment',
+    'duh/extractor/simple_extractors',
+    'duh/extractor/type'
+  ]
 end

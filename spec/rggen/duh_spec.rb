@@ -7,9 +7,7 @@ RSpec.describe RgGen::DUH do
     include_context 'duh common'
 
     before(:all) do
-      load_setup_files(RgGen.builder, [
-        File.join(RGGEN_ROOT, 'rggen-default-register-map/lib/rggen/default_register_map/setup.rb')
-      ])
+      RgGen.enable_all
     end
 
     let(:configuration) do
@@ -62,24 +60,6 @@ RSpec.describe RgGen::DUH do
       expect(bit_field).to have_property(:lsb, 0)
       expect(bit_field).to have_property(:width, 32)
       expect(bit_field).to have_property(:type, :ro)
-    end
-  end
-
-  describe '既定セットアップ' do
-    before do
-      @original_builder = RgGen.builder
-      RgGen.builder(RgGen::Core::Builder.create)
-    end
-
-    after do
-      RgGen.builder(@original_builder)
-    end
-
-    let(:builder) { RgGen.builder }
-
-    it 'DUHサポートを有効にする' do
-      expect(RgGen::DUH.plugin_spec).to receive(:activate).with(equal(builder))
-      RgGen.builder.load_plugins(['rggen-duh'], true)
     end
   end
 end
