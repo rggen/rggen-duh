@@ -43,6 +43,8 @@ Following table describes which RgGen bit field types are supported by DUH forma
 | rwtrg                | no       |                |                    |               |          |
 | ro                   | yes      | read-only      | don't care         | not specified | no       |
 | rotrg                | no       |                |                    |               |          |
+| row0trg              | no       |                |                    |               |          |
+| row1trg              | no       |                |                    |               |          |
 | rowo                 | no       |                |                    |               |          |
 | rowotrg              | no       |                |                    |               |          |
 | rof                  | no       |                |                    |               |          |
