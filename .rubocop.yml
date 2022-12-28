@@ -11,11 +11,11 @@ inherit_from:
 <% end %>
 
 Metrics/BlockLength:
-  IgnoredMethods:
+  AllowedMethods:
     - define_value_extractor
 
 Metrics/MethodLength:
-  IgnoredMethods:
+  AllowedMethods:
     - type_map
 
 Naming/VariableNumber:
