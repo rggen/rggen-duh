@@ -16,7 +16,7 @@ module RgGen
 
         def build_schema
           schema_data = read_schema
-          resolver = ->(uri) { uri.path == 'defs' && schema_data['defs'] || nil }
+          resolver = ->(uri) { uri.path == '/defs' && schema_data['defs'] || nil }
           JSONSchemer.schema(schema_data['component'], ref_resolver: resolver)
         end
 
