@@ -25,7 +25,7 @@ RSpec.describe RgGen::DUH::Loader do
   end
 
   let(:input_data) do
-    RgGen::Core::RegisterMap::InputData.new(:root, valid_value_lists)
+    RgGen::Core::RegisterMap::InputData.new(:root, valid_value_lists, nil)
   end
 
   def create_extracter(target_layers, target_value, &body)

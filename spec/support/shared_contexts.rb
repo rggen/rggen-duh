@@ -23,7 +23,7 @@ RSpec.shared_context 'duh common' do
   end
 
   let(:input_data) do
-    factory.__send__(:create_input_data)
+    factory.__send__(:create_input_data, nil)
   end
 
   let(:loader) do
