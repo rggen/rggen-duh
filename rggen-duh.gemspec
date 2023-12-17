@@ -30,6 +30,4 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'json_refs', '>= 0.1.4'
   spec.add_runtime_dependency 'json_schemer', '>= 2.0.0'
   spec.add_runtime_dependency 'rb_json5', '>= 0.3.0'
-
-  spec.add_development_dependency 'bundler'
 end
