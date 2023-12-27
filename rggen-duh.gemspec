@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
     `git ls-files lib LICENSE CODE_OF_CONDUCT.md README.md`.split($RS)
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '>= 3.0'
+  spec.required_ruby_version = Gem::Requirement.new('>= 3.0')
 
   spec.add_runtime_dependency 'json_refs', '>= 0.1.4'
   spec.add_runtime_dependency 'json_schemer', '>= 2.0.0'
