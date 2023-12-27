@@ -12,3 +12,10 @@ eval_gemfile(gemfile)
 group :rggen do
   gem_patched 'facets'
 end
+
+if ENV.key?('CI')
+  require File.join(root, 'stdgems-version/lib/stdgems_version')
+  gem 'bigdecimal', StdgemsVersion.version('bigdecimal')
+else
+  gem 'bigdecimal'
+end
