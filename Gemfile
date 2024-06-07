@@ -14,8 +14,7 @@ group :rggen do
 end
 
 if ENV.key?('CI')
-  require File.join(root, 'stdgems-version/lib/stdgems_version')
-  gem 'bigdecimal', StdgemsVersion.version('bigdecimal')
+  gem_bundled 'bigdecimal'
 else
   gem 'bigdecimal'
 end
