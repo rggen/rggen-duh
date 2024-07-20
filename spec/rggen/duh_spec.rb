@@ -7,7 +7,14 @@ RSpec.describe RgGen::DUH do
     include_context 'duh common'
 
     before(:all) do
+      RgGen.define_simple_feature(:register_block, :protocol) do
+        configuration { build {} }
+      end
       RgGen.enable_all
+    end
+
+    after(:all) do
+      RgGen.delete(:register_block, :protocol)
     end
 
     let(:configuration) do
